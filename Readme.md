@@ -16,6 +16,8 @@ You can not browse to [localhost:5601](http://localhost:5601) to see your events
 
 ## Extra
 
+Get [the slides that accompany the talk](http://jrgns.net/talks/Moar_Logs.pdf). Not very detailed, but hey :)
+
 Some queries that you can run against Elasticsearch
 
 ```bash
