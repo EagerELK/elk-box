@@ -1,0 +1,19 @@
+input {
+	udp {
+		port => 25826
+		buffer_size => 1452
+		codec => collectd { }
+		type => "collectd"
+	}
+}
+
+output {
+	if [type] == "collectd" {
+		elasticsearch {
+			cluster => "elasticsearch"
+			host => "localhost"
+		}
+
+		# stdout { codec => rubydebug }
+	}
+}

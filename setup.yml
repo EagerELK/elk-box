@@ -1,0 +1,33 @@
+---
+- hosts: all
+  remote_user: vagrant
+  sudo: yes
+  vars:
+    elasticsearch_version: 1.7.0
+    elasticsearch_cluster_name: elasticsearch
+    elasticsearch_index_number_of_replicas: 0
+    elasticsearch_heap_size: 1g
+    logstash_conf_files:
+      - collectd.conf
+      - syslog.conf
+  pre_tasks:
+    - name: Update apt
+      apt: update_cache=yes cache_valid_time=3600
+  roles:
+    - azavea.kibana
+    - Stouts.elasticsearch
+    - geerlingguy.logstash
+  tasks:
+    - name: Change Logstash defaults
+      copy: dest=/etc/default/logstash src=logstash
+    - name: Configure rsyslog
+      copy: dest=/etc/rsyslog.d/10-rsyslog.conf src=10-rsyslog.conf
+    - name: Restart rsyslog
+    # I'd prefer to use the service module, but it seems to be buggy - http://stackoverflow.com/a/30349016/6681
+    # service: name=rsyslog pattern=state=restarted
+      command: service rsyslog restart
+    - name: Restart logstash
+    # I'd prefer to use the service module, but it seems to be buggy - http://stackoverflow.com/a/30349016/6681
+    # service: name=rsyslog pattern=state=restarted
+      command: service logstash restart
+
